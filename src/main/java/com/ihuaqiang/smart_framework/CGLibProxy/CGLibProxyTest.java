@@ -1,7 +1,5 @@
 package com.ihuaqiang.smart_framework.CGLibProxy;
 
-import com.ihuaqiang.smart_framework.proxy.HelloImpl;
-
 /**
  * @author ihuaqiang
  * @version 1.0
@@ -10,9 +8,10 @@ import com.ihuaqiang.smart_framework.proxy.HelloImpl;
 public class CGLibProxyTest {
 
     public static void main(String args[]){
+        BookFacadeImpl bookFacade=new BookFacadeImpl();
         CGLibProxy cgLibProxy=new CGLibProxy();
-        HelloImpl proxy = cgLibProxy.getProxy(HelloImpl.class);
-        proxy.say("ihuaqiang");
+        BookFacadeImpl bookFacadeCglib = (BookFacadeImpl) cgLibProxy.getInstance(bookFacade);
+        bookFacadeCglib.addBook("ihuaqiang");
 
     }
 

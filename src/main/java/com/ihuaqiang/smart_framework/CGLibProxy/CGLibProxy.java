@@ -13,10 +13,25 @@ import java.lang.reflect.Method;
  */
 public class CGLibProxy implements MethodInterceptor {
 
+    private Object target;
 
-    @SuppressWarnings("unchecked")
-    public <T> T getProxy(Class<T> tClass){
-        return (T) Enhancer.create(tClass, this);
+
+    public Object getInstance(Object target) {
+        this.target = target;
+        Enhancer enhancer = new Enhancer();
+        enhancer.setCallback(this);
+        enhancer.setSuperclass(this.target.getClass());
+        return enhancer.create();
+    }
+
+
+
+    @Override
+    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+        before();
+        Object result = methodProxy.invokeSuper(o, objects);
+        after();
+        return result;
     }
 
 
@@ -29,13 +44,5 @@ public class CGLibProxy implements MethodInterceptor {
     private void after() {
         System.out.println("After");
 
-    }
-
-    @Override
-    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-        before();
-        Object result = methodProxy.invokeSuper(o, objects);
-        after();
-        return result;
     }
 }
